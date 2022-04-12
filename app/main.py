@@ -8,7 +8,7 @@ from .config import settings
 
 from app import database
 
-# models.Base.metadata.create_all(bind=engine)# with alembic no need this command to generate 
+# models.Base.metadata.create_all(bind=engine)          # with alembic no need this command to generate 
 
 app = FastAPI()
 
@@ -27,6 +27,6 @@ app.include_router(user.router)
 app.include_router(auth.router)
 app.include_router(vote.router)
 
-@app.get("/")  #decorator for clear request fastapi is Get
+@app.get("/" )  #decorator for clear request fastapi is Get
 def root():
     return {"message": "Hello World"}
