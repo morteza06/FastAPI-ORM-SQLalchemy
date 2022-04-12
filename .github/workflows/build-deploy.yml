@@ -2,10 +2,20 @@ name: Build and Deploy Code
 
 on: [push , pull_request]
 
+
 jobs:
   job1:
-   runs-on: ubuntu-latest
-   steps:
+    env:
+      DATABASE_HOSTNAME: localhost
+      DATABASE_PORT: 5432
+      DATABASE_PASSWORD: admin
+      DATABASE_NAME: fastapi
+      DATABASE_USERNAME: postgres
+      SECRET_KEY: 9009304235D09SFSFY9SHDF9ASDF7D0809DSF6623423H4OH35435HOI2H345H6-5T09DFGS09DFG
+      ALGORITHM: HS256
+      ACCESS_TOKEN_EXPIRE_MINUTES: 30
+    runs-on: ubuntu-latest
+    steps:
      - name: pulling git repo
        uses: actions/checkout@v2
      - name: install python version 3.9
