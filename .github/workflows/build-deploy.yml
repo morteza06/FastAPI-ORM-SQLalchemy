@@ -96,8 +96,8 @@ jobs:
           script: |
             cd /app/src
             git pull
-            sudo systemctl restart api
-            
+            echo ${{secrets.PROD_PASSWORD}} | sudo -S systemctl restart api
+
         
     # pull or github repo
     # install heroku cli
