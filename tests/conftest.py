@@ -19,7 +19,9 @@ engine = create_engine(SQLALCHEMY_DATABASE_URL)
 TestingSessionLocal = sessionmaker(
     autocommit=False, autoflush=False, bind=engine)
 #            with alembic no need this command to generate 
-@pytest.fixture()
+
+
+@pytest.fixture
 def session():  
     print("my session fixture ran")
     Base.metadata.drop_all(bind=engine)
@@ -30,8 +32,7 @@ def session():
     finally:
         db.close()
 
-
-@pytest.fixture()
+@pytest.fixture
 def client(session):
     # run our code before we run our test
     def override_get_db():
@@ -44,11 +45,10 @@ def client(session):
     # run our code after our test finishes
 
 @pytest.fixture
-def test_user2(session):
-    user_data = {"email": "morteza1@gmail.com",
-                 "password": "admin"}
+def test_user2(client):
+    user_data = {"email": "admin2@gmail.com",
+                 "password": "admin123"}
     res = client.post("/users/", json=user_data)
-    
     assert res.status_code == 201
     
     print(res.json())
@@ -57,11 +57,10 @@ def test_user2(session):
     return new_user
 
 @pytest.fixture
-def test_user(session):
-    user_data = {"email": "morteza@gmail.com",
-                 "password": "admin"}
+def test_user(client):
+    user_data = {"email": "admin@gmail.com",
+                 "password": "admin123"}
     res = client.post("/users/", json=user_data)
-    
     assert res.status_code == 201
     
     print(res.json())
@@ -79,7 +78,6 @@ def authorized_client(client, token):
         **client.headers,
         "Authorization": f"Bearer {token}"
     }
-    
     return client
 
 @pytest.fixture

@@ -4,25 +4,35 @@ from app import schemas
 from app.config import settings
 from .database import client, session
 
+@pytest.fixture
+def test_user(client):
+    user_data = {"email": "admin@gmail.com",
+                 "password": "admin123"}
+    res = client.post("/users/", json=user_data)
+    
+    assert res.status_code == 201
+    print(res.json())
+    new_user = res.json()
+    new_user['password'] = user_data['password']
+    return new_user
 
-
-# def test_root(client):
-#     res = client.get("/")
-#     print(res.json().get('message'))
-#     assert res.json().get('message') == 'Hello World'
-#     assert res.status_code == 200
+def test_root(client):
+    res = client.get("/")
+    # print(res.json().get('message'))
+    assert res.json().get('message') == 'Hello World successfully deployed from CI/CD pipeline'
+    assert res.status_code == 200
 
 def test_create_user(client):
     res = client.post(
-         "/users", json={"email": "hello123@gmail.com", "password": "password123"})
+         "/users/", json={"email": "admin@gmail.com", "password": "admin123"})
     
     new_user = schemas.UserOut(**res.json()) #pydantic model for schemas of UserOut
-    assert  new_user.email == "hello123@gmail.com" # for pass this test. need delete data in db for  repeat running
+    assert  new_user.email == "admin@gmail.com" # for pass this test. need delete data in db for  repeat running
     assert res.status_code == 201
 
-def test_login_user(test_user, client):
+def test_login_user(client, test_user):
     res = client.post(
-        "/login", date={"username": test_user['email'], "password": test_user['password']}
+        "/login", data={"username": test_user['email'], "password": test_user['password']}
     )
     login_res = schemas.Token(**res.json())
     payload = jwt.decode(login_res.access_token, 
