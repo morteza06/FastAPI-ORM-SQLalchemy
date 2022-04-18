@@ -1,7 +1,7 @@
 ﻿# FastAPI 
  FastAPI is simple project from API developed in python with a lot of concept.
  
-Hi 
+ 
 this project is a learning course from Sanjeev Thiyagarajan.
 https://github.com/Sanjeev-Thiyagarajan/fastapi-course
 
